@@ -1,17 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('entry-form');
     const entriesSection = document.getElementById('entries-section');
-
     function createEntry(title, content) {
         const entryDiv = document.createElement('div');
         entryDiv.classList.add('entry');
-
         const titleEl = document.createElement('h3');
         titleEl.textContent = title;
-
         const contentEl = document.createElement('p');
         contentEl.textContent = content;
-
         const deleteBtn = document.createElement('button');
         deleteBtn.textContent = 'Eliminar';
         deleteBtn.addEventListener('click', () => {
@@ -29,13 +25,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert('No se pudo eliminar la entrada.');
                 });
         });
-
         entryDiv.appendChild(titleEl);
         entryDiv.appendChild(contentEl);
         entryDiv.appendChild(deleteBtn);
         entriesSection.appendChild(entryDiv);
     }
-
     fetch('/entries')
         .then(res => res.json())
         .then(entries => {
@@ -46,7 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(err => {
             console.error('Error al cargar entradas:', err);
         });
-
     form.addEventListener('submit', (e) => {
         e.preventDefault();
 
@@ -74,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(err => {
                 console.error(err);
-                alert('Hubo un problema al guardar la entrada.');
+                alert('Error al guardar la entrada.');
             });
     });
 });

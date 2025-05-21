@@ -3,12 +3,10 @@ const fs = require('fs');
 const path = require('path');
 const app = express();
 const PORT = 3000;
-
 const ENTRIES_PATH = path.join(__dirname, 'entries.json');
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '..', 'public')));
-
 app.get('/entries', (req, res) => {
     fs.readFile(ENTRIES_PATH, 'utf8', (err, data) => {
         if (err) {
@@ -23,7 +21,6 @@ app.get('/entries', (req, res) => {
         }
     });
 });
-
 app.post('/entries', (req, res) => {
     const { title, content } = req.body;
     if (!title || !content) {
@@ -39,9 +36,7 @@ app.post('/entries', (req, res) => {
                 entries = JSON.parse(data);
             } catch {}
         }
-
         entries.push(newEntry);
-
         fs.writeFile(ENTRIES_PATH, JSON.stringify(entries, null, 2), (err) => {
             if (err) {
                 console.error('Error al escribir archivo:', err);
@@ -52,7 +47,6 @@ app.post('/entries', (req, res) => {
     });
 });
 
-// Endpoint para eliminar una entrada
 app.post('/entries/delete', (req, res) => {
     const { title, content } = req.body;
     fs.readFile(ENTRIES_PATH, 'utf8', (err, data) => {
@@ -81,7 +75,6 @@ app.post('/entries/delete', (req, res) => {
         });
     });
 });
-
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
