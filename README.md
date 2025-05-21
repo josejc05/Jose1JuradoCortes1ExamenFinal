@@ -1,5 +1,4 @@
 # Jose1JuradoCortes1ExamenFinal
-https://github.com/josejc05/Jose1JuradoCortes1ExamenFinal.git
 
 ## Diseño CSS
 
@@ -33,3 +32,15 @@ Se validan datos faltantes en las solicitudes POST.
 
 ### Almacenamiento
 Las entradas se guardan en el archivo server/entries.json, usando el sistema de archivos de Node.
+
+## Análisis – Mejoras en Rendimiento y Seguridad
+
+### 1. Rendimiento
+Mejora sugerida: Implementar almacenamiento en base de datos como SQLite o MongoDB.
+
+Justificación: Leer y escribir todo el archivo JSON en cada petición puede escalar mal con muchas entradas. Una base de datos permitiría búsquedas y escritura más eficientes y seguras, además de facilitar concurrencia.
+
+### 2. Seguridad
+Mejora sugerida: Sanitizar entradas del usuario y evitar ejecución de scripts.
+
+Justificación: Actualmente, los datos se insertan directamente en el DOM, lo que puede permitir ataques XSS si un usuario ingresa código malicioso. Se debería escapar el contenido antes de insertarlo o usar librerías que lo hagan automáticamente.
