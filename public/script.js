@@ -15,7 +15,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const deleteBtn = document.createElement('button');
         deleteBtn.textContent = 'Eliminar';
         deleteBtn.addEventListener('click', () => {
-            entriesSection.removeChild(entryDiv);
+            fetch('/entries/delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, content })
+            })
+                .then(res => {
+                    if (!res.ok) throw new Error('Error al eliminar entrada');
+                    entriesSection.removeChild(entryDiv);
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('No se pudo eliminar la entrada.');
+                });
         });
 
         entryDiv.appendChild(titleEl);
@@ -23,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
         entryDiv.appendChild(deleteBtn);
         entriesSection.appendChild(entryDiv);
     }
+
     fetch('/entries')
         .then(res => res.json())
         .then(entries => {
@@ -33,6 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(err => {
             console.error('Error al cargar entradas:', err);
         });
+
     form.addEventListener('submit', (e) => {
         e.preventDefault();
 

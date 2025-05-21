@@ -37,8 +37,7 @@ app.post('/entries', (req, res) => {
         if (!err && data) {
             try {
                 entries = JSON.parse(data);
-            } catch {
-            }
+            } catch {}
         }
 
         entries.push(newEntry);
@@ -49,6 +48,36 @@ app.post('/entries', (req, res) => {
                 return res.status(500).json({ error: 'Error al guardar entrada' });
             }
             res.status(201).json({ message: 'Entrada agregada correctamente' });
+        });
+    });
+});
+
+// Endpoint para eliminar una entrada
+app.post('/entries/delete', (req, res) => {
+    const { title, content } = req.body;
+    fs.readFile(ENTRIES_PATH, 'utf8', (err, data) => {
+        if (err) {
+            console.error('Error al leer entradas:', err);
+            return res.status(500).json({ error: 'Error al leer entradas' });
+        }
+        let entries = [];
+        try {
+            entries = JSON.parse(data || '[]');
+        } catch (parseErr) {
+            console.error('Error al parsear JSON:', parseErr);
+            return res.status(500).json({ error: 'Error al parsear JSON' });
+        }
+        const index = entries.findIndex(e => e.title === title && e.content === content);
+        if (index === -1) {
+            return res.status(404).json({ error: 'Entrada no encontrada' });
+        }
+        entries.splice(index, 1);
+        fs.writeFile(ENTRIES_PATH, JSON.stringify(entries, null, 2), (err) => {
+            if (err) {
+                console.error('Error al guardar entradas:', err);
+                return res.status(500).json({ error: 'Error al guardar entradas' });
+            }
+            res.json({ message: 'Entrada eliminada' });
         });
     });
 });
